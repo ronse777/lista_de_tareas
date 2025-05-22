@@ -1,0 +1,22 @@
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de datos local
+db.sqlite3
+db.sqlite3-journal
+
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Directorios de IDE
+.idea/
+.vscode/

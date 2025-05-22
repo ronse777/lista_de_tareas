@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+                    
+                    <!-- Mensajes de error -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            Usuario o contraseña incorrectos.
+                        </div>
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Campo de USUARIO -->
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de Usuario:</label>
+                            <input 
+                                type="text" 
+                                name="username" 
+                                class="form-control"
+                                placeholder="Ej: juan123"
+                                required
+                                autofocus
+                            >
+                        </div>
+
+                        <!-- Campo de CONTRASEÑA -->
+                        <div class="mb-3">
+                            <label class="form-label">Contraseña:</label>
+                            <input 
+                                type="password" 
+                                name="password" 
+                                class="form-control"
+                                placeholder="Ingresa tu contraseña"
+                                required
+                            >
+                        </div>
+
+                        <!-- Redirección -->
+                        <input type="hidden" name="next" value="{{ next }}">
+
+                        <!-- Botón -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Ingresar</button>
+                        </div>
+
+                        <!-- Enlace a registro -->
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                ¿No tienes cuenta? 
+                                <a href="{% url 'tareas:registro' %}" class="text-decoration-none">
+                                    Regístrate aquí
+                                </a>
+                            </small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

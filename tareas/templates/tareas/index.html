@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Mis Tareas{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <h2 class="card-title mb-4">Agregar Nueva Tarea</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.nombre.label_tag }}
+                {{ form.nombre }}
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    {{ form.prioridad.label_tag }}
+                    {{ form.prioridad }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.recordatorio.label_tag }}
+                    {{ form.recordatorio }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Tarea</button>
+        </form>
+    </div>
+</div>
+
+<!-- TAREAS PENDIENTES -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <h3 class="card-title">Tareas Pendientes</h3>
+        <ul class="list-group">
+            {% for tarea in tareas_pendientes %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ tarea.nombre }}</strong>
+                        <span class="badge bg-{% if tarea.prioridad == 'alta' %}danger{% elif tarea.prioridad == 'media' %}warning{% else %}success{% endif %} ms-2">
+                            {{ tarea.get_prioridad_display }}
+                        </span>
+                        <br>
+                        <small class="text-muted">
+                            🕒 Creada: {{ tarea.fecha_creacion|date:"d/m/Y H:i" }}
+                        </small>
+                        {% if tarea.recordatorio %}
+                            <br>
+                            <small class="text-muted">
+                                ⏰ Recordatorio: {{ tarea.recordatorio|date:"d/m/Y H:i" }}
+                            </small>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="{% url 'tareas:completar_tarea' tarea.id %}" class="btn btn-sm btn-success me-2">Completar</a>
+                        <a href="{% url 'tareas:eliminar_tarea' tarea.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">No tienes tareas pendientes.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- TAREAS COMPLETADAS -->
+<div class="card shadow">
+    <div class="card-body">
+        <h3 class="card-title">Tareas Completadas</h3>
+        <ul class="list-group">
+            {% for tarea in tareas_completadas %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <s>{{ tarea.nombre }}</s>
+                        <span class="badge bg-secondary ms-2">Completada</span>
+                        <br>
+                        <small class="text-muted">
+                            ✅ Completada el: {{ tarea.fecha_completado|date:"d/m/Y H:i" }}
+                        </small>
+                    </div>
+                    <a href="{% url 'tareas:eliminar_tarea' tarea.id %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">No hay tareas completadas aún.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
